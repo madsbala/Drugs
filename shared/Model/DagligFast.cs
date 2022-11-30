@@ -18,14 +18,16 @@ public class DagligFast : Ordination {
     public DagligFast() : base(null!, new DateTime(), new DateTime()) {
     }
 
-	public override double samletDosis() {
-		
+	public override double samletDosis()
+	{
 		return base.antalDage() * doegnDosis();
+		//den daglige dosis ganget med antal dage
 	}
 
-	public override double doegnDosis() {
-		// TODO: Implement!
-        return -1;
+	public override double doegnDosis()
+	{
+		return MorgenDosis.antal + MiddagDosis.antal + AftenDosis.antal + NatDosis.antal ;
+		//sammenlagt alle de givne doser for et døgn
 	}
 	
 	public Dosis[] getDoser() {

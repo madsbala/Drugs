@@ -20,11 +20,19 @@ public class DagligSkæv : Ordination {
 	public override double samletDosis() {
 		return base.antalDage() * doegnDosis();
 	}
+	//samlet dosis, talt sammen af døgndosis ganget sammen af antal dage
 
-	public override double doegnDosis() {
-		// TODO: Implement!
-        return -1;
+	public override double doegnDosis()
+	{
+		double sum = 0;
+		for (int i = 0; i < doser.Count(); i++)
+		{
+			sum = doser[i].antal;
+		}
+		return sum;
 	}
+	//en sum af den samlede antal doser på en dag, talt sammen i et for-loop
+
 
 	public override String getType() {
 		return "DagligSkæv";
