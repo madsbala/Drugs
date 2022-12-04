@@ -136,12 +136,15 @@ public class DataService
         return null!;
     }
 
+    //opretter en Daglig Fast ordination, som den binder sammen med en patient på et patientID
+    //der oprettes en variabel, hvor vi binder 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
-        //int laegemiddelID = DagligFast.laegemiddel.LaegemiddelId; 
-        //DagligFast dagligFast = new DagligFast(startDato, slutDato, laegemiddelId , antalMorgen, antalMiddag, antalAften, antalNat)
+        var lægemiddle = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
+        Laegemiddel ll = lægemiddle[0];
+        return new DagligFast(startDato, slutDato, ll, antalMorgen, antalMorgen, antalAften, antalNat);
 
         // TODO: Implement!
         return null!;
