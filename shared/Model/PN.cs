@@ -50,7 +50,7 @@ public class PN : Ordination {
                 }
             }
 
-                //laver maritmetik for at finde antal dage imellem laveste og højeste dato
+                //laver aritmetik for at finde antal dage imellem laveste og højeste dato
             int dage = (int)(max - min).TotalDays + 1;
 
                 //finder gennemsnit af dosis på antal dage
@@ -60,15 +60,18 @@ public class PN : Ordination {
     }
 
 
-    public override double samletDosis() {
+    public override double samletDosis()
+    {
         return dates.Count() * antalEnheder;
     }
 
-    public int getAntalGangeGivet() {
+    public int getAntalGangeGivet()
+    {
         return dates.Count();
     }
 
-	public override String getType() {
+	public override String getType()
+    {
 		return "PN";
 	}
 }

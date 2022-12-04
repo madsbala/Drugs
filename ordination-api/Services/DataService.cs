@@ -130,25 +130,31 @@ public class DataService
         return db.Laegemiddler.ToList();
     }
 
-    public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato) {
+    public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
+    {
         // TODO: Implement!
         return null!;
     }
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId, 
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
-        DateTime startDato, DateTime slutDato) {
+        DateTime startDato, DateTime slutDato)
+    {
+        //int laegemiddelID = DagligFast.laegemiddel.LaegemiddelId; 
+        //DagligFast dagligFast = new DagligFast(startDato, slutDato, laegemiddelId , antalMorgen, antalMiddag, antalAften, antalNat)
 
         // TODO: Implement!
         return null!;
     }
 
-    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato) {
+    public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
+    {
         // TODO: Implement!
         return null!;
     }
 
-    public string AnvendOrdination(int id, Dato dato) {
+    public string AnvendOrdination(int id, Dato dato)
+    {
         // TODO: Implement!
         return null!;
     }
@@ -160,7 +166,8 @@ public class DataService
     /// <param name="patient"></param>
     /// <param name="laegemiddel"></param>
     /// <returns></returns>
-	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
+	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId)
+    {
         // TODO: Implement!
         return -1;
 	}

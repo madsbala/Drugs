@@ -22,7 +22,9 @@ public abstract class Ordination
     /// <summary>
     /// Antal hele dage mellem startdato og slutdato. Begge dage inklusive.
     /// </summary>
-    public int antalDage()
+
+    /// Status: Implementeret, mangler test
+    public int antalDage() 
     {
         int dage = (slutDen - startDen).Days;
         return dage;
