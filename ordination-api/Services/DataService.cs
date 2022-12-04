@@ -40,6 +40,7 @@ public class DataService
             db.SaveChanges();
         }
 
+        //laegemiddler med to d'er?? Kristian for fan!!
         Laegemiddel[] laegemiddler = new Laegemiddel[5];
         laegemiddler[0] = db.Laegemiddler.FirstOrDefault()!;
         if (laegemiddler[0] == null)
@@ -132,8 +133,16 @@ public class DataService
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
     {
-        // TODO: Implement!
-        return null!;
+        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
+        Laegemiddel lægemiddel = lægemiddelArray[0];
+
+        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
+        Patient patient = patients[0];
+
+        PN pn = new PN(startDato, slutDato, antal, lægemiddel);
+
+        patient.ordinationer.Add(pn);
+        return pn;
     }
 
     //opretter en Daglig Fast ordination, som den binder sammen med en patient på et patientID
@@ -142,18 +151,30 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
-        var lægemiddle = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
-        Laegemiddel ll = lægemiddle[0];
-        return new DagligFast(startDato, slutDato, ll, antalMorgen, antalMorgen, antalAften, antalNat);
+        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
+        Laegemiddel lægemiddel = lægemiddelArray[0];
 
-        // TODO: Implement!
-        return null!;
+        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
+        Patient patient = patients[0];
+
+        DagligFast dagligFast = new DagligFast(startDato, slutDato, lægemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
+
+        patient.ordinationer.Add(dagligFast);
+        return dagligFast;
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
-        // TODO: Implement!
-        return null!;
+        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
+        Laegemiddel lægemiddel = lægemiddelArray[0];
+
+        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
+        Patient patient = patients[0];
+
+        DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, lægemiddel, doser);
+
+        patient.ordinationer.Add(dagligSkæv);
+        return dagligSkæv;
     }
 
     public string AnvendOrdination(int id, Dato dato)
