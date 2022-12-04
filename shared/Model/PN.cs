@@ -50,7 +50,7 @@ public class PN : Ordination {
                 }
             }
 
-                //laver aritmetik for at finde antal dage imellem laveste og højeste dato
+                //laver maritmetik for at finde antal dage imellem laveste og højeste dato
             int dage = (int)(max - min).TotalDays + 1;
 
                 //finder gennemsnit af dosis på antal dage
