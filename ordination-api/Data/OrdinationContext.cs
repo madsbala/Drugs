@@ -15,6 +15,7 @@ namespace Data
         public OrdinationContext (DbContextOptions<OrdinationContext> options)
             : base(options)
         {
+            
         }
     }
 }

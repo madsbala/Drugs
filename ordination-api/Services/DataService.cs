@@ -142,6 +142,8 @@ public class DataService
         PN pn = new PN(startDato, slutDato, antal, lægemiddel);
 
         patient.ordinationer.Add(pn);
+        db.Add(pn);
+        db.SaveChanges();
         return pn;
     }
 
@@ -159,8 +161,14 @@ public class DataService
 
         DagligFast dagligFast = new DagligFast(startDato, slutDato, lægemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
 
-        patient.ordinationer.Add(dagligFast);
+        db.Patienter.FirstOrDefault(x => x.PatientId == patientId).ordinationer.Add(dagligFast);
+        //db.Add(dagligFast);
+        db.SaveChanges();
+
+        Console.WriteLine(dagligFast);
+
         return dagligFast;
+
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
@@ -174,6 +182,8 @@ public class DataService
         DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, lægemiddel, doser);
 
         patient.ordinationer.Add(dagligSkæv);
+        db.Add(dagligSkæv);
+        db.SaveChanges();
         return dagligSkæv;
     }
 
@@ -192,8 +202,10 @@ public class DataService
     /// <returns></returns>
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId)
     {
+        double patient = db.Patienter.Where(x => x.PatientId == patientId).ToArray()[0].vaegt;
+        Console.WriteLine($"patientvægt: {patient}");
+
         // TODO: Implement!
         return -1;
 	}
-    
 }
