@@ -154,7 +154,7 @@ public class DataService
         }
 
         if(lægemiddel ==  null || patientFind == null){
-            throw new ArgumentNullException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
+            throw new ArgumentException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
         }
 
         PN pn = new PN(startDato, slutDato, antal, lægemiddel);
@@ -184,7 +184,7 @@ public class DataService
         }
 
         if(lægemiddel ==  null || patientFind == null){
-            throw new ArgumentNullException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
+            throw new ArgumentException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
         }
 
         DagligFast dagligFast = new DagligFast(startDato, slutDato, lægemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
@@ -214,7 +214,7 @@ public class DataService
         }
 
         if(lægemiddel ==  null || patientFind == null){
-            throw new ArgumentNullException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
+            throw new ArgumentException($"Er Lægemiddel null?: {lægemiddel == null} Er Patient null?: {patientFind == null}");
         }
 
         db.Patienter.First(x => x.PatientId == patientId).ordinationer.Add(dagligSkæv);
@@ -226,7 +226,7 @@ public class DataService
     {
         Ordination ordinationFind = db.Ordinationer.First(x => x.OrdinationId == id);
         if(ordinationFind == null){
-            throw new ArgumentNullException($"Ordination er null");
+            throw new ArgumentException($"Ordination er null");
         }
 
         Ordination ordination = db.Ordinationer.First(x => x.OrdinationId == id);
@@ -247,7 +247,7 @@ public class DataService
         Laegemiddel laegemiddel = db.Laegemiddler.First(x => x.LaegemiddelId == laegemiddelId);
 
         if(laegemiddel ==  null || patient == null){
-            throw new ArgumentNullException($"Er Lægemiddel null?: {laegemiddel == null} Er Patient null?: {patient == null}");
+            throw new ArgumentException($"Er Lægemiddel null?: {laegemiddel == null} Er Patient null?: {patient == null}");
         }
 
 
