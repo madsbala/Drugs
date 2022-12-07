@@ -32,34 +32,37 @@ public class ServiceTest
     //opretter en daglig fast som planlagt
     public void OpretDagligFast()
     {
-        Patient patient = service.GetPatienter().First();
-        Laegemiddel lm = service.GetLaegemidler().First();
+        Patient patient1 = service.GetPatienter().First();
+        Laegemiddel lm1 = service.GetLaegemidler().First();
 
         Assert.AreEqual(1, service.GetDagligFaste().Count());
 
-        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
+        service.OpretDagligFast(patient1.PatientId, lm1.LaegemiddelId,
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
     }
 
     [TestMethod]
-    //skal fejle
+    //skal fejle fordi der gives -10 dage
     public void OpretDagligFastDerFejler()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
-        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        Assert.AreEqual(2, service.GetDagligFaste().Count());
 
-        //Assert.AreEqual()
+        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
+            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(-10));
+
+        Assert.AreEqual(3, service.GetDagligFaste().Count());
+
     }
 
-
+    
     [TestMethod]
     //opretter en daglig skæv som planlagt
-    public void OpretDagligSkæv()
+    public void OpretDagligSkaev()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
@@ -73,12 +76,14 @@ public class ServiceTest
                 new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
                 new Dosis(CreateTimeOnly(18, 45, 0), 3)
             }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(2, service.GetDagligSkæve().Count());
     }
 
-
+    
     [TestMethod]
     //skal fejle, da lægemiddel er null
-    public void OpretDagligSkaevDerFejler1()
+    public void OpretDagligSkaevDerFejler()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = null;
@@ -90,69 +95,67 @@ public class ServiceTest
                 new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
                 new Dosis(CreateTimeOnly(18, 45, 0), 3)
             }, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(2, service.GetDagligSkæve().Count());
     }
 
-
+    
     [TestMethod]
-    //skal fejle, da patient er null
-    public void OpretDagligSkaevDerFejler2()
-    {
-        Patient patient = null;
-        Laegemiddel lm = service.GetLaegemidler().First();
-
-        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
-            new Dosis[] {
-                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
-                new Dosis(CreateTimeOnly(12, 40, 0), 1),
-                new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
-                new Dosis(CreateTimeOnly(18, 45, 0), 3)
-            }, DateTime.Now, DateTime.Now.AddDays(3));
-    }
-
-
-    [TestMethod]
-    //skal fejle, da antal dage er negative
-    public void OpretDagligSkaevDerFejler3()
-    {
-        Patient patient = service.GetPatienter().First();
-        Laegemiddel lm = service.GetLaegemidler().First();
-
-        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
-            new Dosis[] {
-                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
-                new Dosis(CreateTimeOnly(12, 40, 0), 1),
-                new Dosis(CreateTimeOnly(16, 0, 0), 2.5),
-                new Dosis(CreateTimeOnly(18, 45, 0), 3)
-            }, DateTime.Now, DateTime.Now.AddDays(-10));
-    }
-
-
-    [TestMethod]
-    //skal fejle, da antal enheder er negativ
-    public void OpretDagligSkaevDerFejler4()
-    {
-        Patient patient = service.GetPatienter().First();
-        Laegemiddel lm = service.GetLaegemidler().First();
-
-        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId,
-            new Dosis[] {
-                new Dosis(CreateTimeOnly(12, 0, 0), 0.5),
-                new Dosis(CreateTimeOnly(12, 40, 0), 1),
-                new Dosis(CreateTimeOnly(16, 0, 0), -2.5),
-                new Dosis(CreateTimeOnly(18, 45, 0), 3)
-            }, DateTime.Now, DateTime.Now.AddDays(3));
-    }
-
-    [TestMethod]
+    //opretter en gyldig PN
     public void OpretPN()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
 
-        Assert.AreEqual(1, service.GetDagligFaste().Count());
+        Assert.AreEqual(4, service.GetPNs().Count());
 
-        service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
-            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId, 420, DateTime.Now, DateTime.Now.AddDays(69));
+
+        Assert.AreEqual(5, service.GetPNs().Count());
+    }
+
+
+    [TestMethod]
+
+    public void OpretPNDerFejler()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = null;
+
+        Assert.AreEqual(5, service.GetPNs().Count());
+
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId, 420, DateTime.Now, DateTime.Now.AddDays(69));
+
+        Assert.AreEqual(6, service.GetPNs().Count());
+    }
+
+    [TestMethod]
+    public void AnvendOrdination()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        PN pn = service.GetPNs().First();
+
+        Dato dato = new Dato();
+
+        dato.dato = new DateTime(2020, 10, 20);
+        Assert.AreEqual("dosis ikke givet", service.AnvendOrdination(1, dato));
+
+        dato.dato = new DateTime(2021, 01, 05);
+        Assert.AreEqual("dosis givet", service.AnvendOrdination(1, dato));
+
+    }
+
+    [TestMethod]
+    public void GetAnbefaletDosisPerDøgn()
+    {
+        double patientvægt = service.GetAnbefaletDosisPerDøgn(3, 2);
+        //Giver ikke korrekt resultat pga. double 134.10000002
+        Assert.AreEqual(134.1,patientvægt);
+        Assert.AreEqual(1.536, patientvægt);
+
+
+
     }
 
     [TestMethod]
