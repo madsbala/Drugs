@@ -133,16 +133,11 @@ public class DataService
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
     {
-        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
-        Laegemiddel lægemiddel = lægemiddelArray[0];
-
-        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
-        Patient patient = patients[0];
+        var lægemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
 
         PN pn = new PN(startDato, slutDato, antal, lægemiddel);
 
-        patient.ordinationer.Add(pn);
-        db.Add(pn);
+        db.Patienter.FirstOrDefault(x => x.PatientId == patientId).ordinationer.Add(pn);
         db.SaveChanges();
         return pn;
     }
@@ -153,19 +148,13 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat, 
         DateTime startDato, DateTime slutDato)
     {
-        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
-        Laegemiddel lægemiddel = lægemiddelArray[0];
-
-        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
-        Patient patient = patients[0];
+        Laegemiddel lægemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
 
         DagligFast dagligFast = new DagligFast(startDato, slutDato, lægemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
 
         db.Patienter.FirstOrDefault(x => x.PatientId == patientId).ordinationer.Add(dagligFast);
-        //db.Add(dagligFast);
-        db.SaveChanges();
 
-        Console.WriteLine(dagligFast);
+        db.SaveChanges();
 
         return dagligFast;
 
@@ -173,24 +162,20 @@ public class DataService
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
-        var lægemiddelArray = db.Laegemiddler.Where(x => x.LaegemiddelId == laegemiddelId).ToArray();
-        Laegemiddel lægemiddel = lægemiddelArray[0];
-
-        var patients = db.Patienter.Where(x => x.PatientId == patientId).ToArray();
-        Patient patient = patients[0];
+        Laegemiddel lægemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
 
         DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, lægemiddel, doser);
 
-        patient.ordinationer.Add(dagligSkæv);
-        db.Add(dagligSkæv);
+        db.Patienter.FirstOrDefault(x => x.PatientId == patientId) .ordinationer.Add(dagligSkæv);
         db.SaveChanges();
         return dagligSkæv;
     }
 
     public string AnvendOrdination(int id, Dato dato)
     {
-        // TODO: Implement!
-        return null!;
+        Ordination ordination = db.Ordinationer.First(x => x.OrdinationId == id);
+        return ordination.startDen.Date <= dato.dato.Date && ordination.slutDen.Date >= dato.dato.Date ? 
+        ordination.laegemiddel.navn : "Intet lægemiddle";
     }
 
     /// <summary>
@@ -202,10 +187,12 @@ public class DataService
     /// <returns></returns>
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId)
     {
-        double patient = db.Patienter.Where(x => x.PatientId == patientId).ToArray()[0].vaegt;
-        Console.WriteLine($"patientvægt: {patient}");
+        Patient patient = db.Patienter.FirstOrDefault(x => x.PatientId == patientId);
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
 
-        // TODO: Implement!
-        return -1;
+        if(patient.vaegt < 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnLet;}
+        if(patient.vaegt >= 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnNormal;}
+        //Over vaeget 120
+        return patient.vaegt * laegemiddel.enhedPrKgPrDoegnTung;
 	}
 }
