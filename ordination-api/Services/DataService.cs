@@ -224,14 +224,14 @@ public class DataService
 
     public string AnvendOrdination(int id, Dato dato)
     {
-        Ordination ordinationFind = db.Ordinationer.First(x => x.OrdinationId == id);
-        if(ordinationFind == null){
-            throw new ArgumentException($"Ordination er null");
-            
+        PN pn = db.PNs.Find(id);
+        bool givesDen = pn.givDosis(dato);
+        if(givesDen)
+        {
+            db.SaveChanges();
+            return "dosis givet";
         }
-
-        Ordination ordination = db.Ordinationer.First(x => x.OrdinationId == id);
-        return  ordination.laegemiddel.navn;
+        return "dosis ikke givet";
     }
 
     /// <summary>
