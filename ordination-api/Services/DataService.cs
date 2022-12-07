@@ -191,11 +191,19 @@ public class DataService
 
         Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
 
+        if (patient.vaegt < 0)
+            { return -1; }
 
+        if (patient.vaegt > 0 && patient.vaegt < 25)
+            { return patient.vaegt * laegemiddel.enhedPrKgPrDoegnLet; }
 
-        if(patient.vaegt < 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnLet;}
-        if(patient.vaegt >= 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnNormal;}
-       //vaegt over 120
-        return patient.vaegt * laegemiddel.enhedPrKgPrDoegnTung;
+        if (patient.vaegt >= 25 && patient.vaegt < 120)
+            { return patient.vaegt * laegemiddel.enhedPrKgPrDoegnNormal; }
+
+        if (patient.vaegt >= 120 && patient.vaegt < 1500)
+            { return patient.vaegt * laegemiddel.enhedPrKgPrDoegnTung; }
+
+        else
+            { return -1; }
 	}
 }
