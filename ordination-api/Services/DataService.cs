@@ -227,10 +227,11 @@ public class DataService
         Ordination ordinationFind = db.Ordinationer.First(x => x.OrdinationId == id);
         if(ordinationFind == null){
             throw new ArgumentException($"Ordination er null");
+            
         }
 
         Ordination ordination = db.Ordinationer.First(x => x.OrdinationId == id);
-        return ordination.startDen.Date <= dato.dato.Date && ordination.slutDen.Date >= dato.dato.Date ? ordination.laegemiddel.navn : "Intet lægemiddle";
+        return  ordination.laegemiddel.navn;
     }
 
     /// <summary>
