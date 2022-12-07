@@ -153,7 +153,7 @@ public class DataService
         DagligFast dagligFast = new DagligFast(startDato, slutDato, lægemiddel, antalMorgen, antalMiddag, antalAften, antalNat);
 
         db.Patienter.FirstOrDefault(x => x.PatientId == patientId).ordinationer.Add(dagligFast);
-
+   
         db.SaveChanges();
 
         return dagligFast;
@@ -166,6 +166,7 @@ public class DataService
 
         DagligSkæv dagligSkæv = new DagligSkæv(startDato, slutDato, lægemiddel, doser);
 
+       
         db.Patienter.FirstOrDefault(x => x.PatientId == patientId) .ordinationer.Add(dagligSkæv);
         db.SaveChanges();
         return dagligSkæv;
@@ -174,8 +175,7 @@ public class DataService
     public string AnvendOrdination(int id, Dato dato)
     {
         Ordination ordination = db.Ordinationer.First(x => x.OrdinationId == id);
-        return ordination.startDen.Date <= dato.dato.Date && ordination.slutDen.Date >= dato.dato.Date ? 
-        ordination.laegemiddel.navn : "Intet lægemiddle";
+        return ordination.startDen.Date <= dato.dato.Date && ordination.slutDen.Date >= dato.dato.Date ?  ordination.laegemiddel.navn : "Intet lægemiddle";
     }
 
     /// <summary>
@@ -188,11 +188,14 @@ public class DataService
 	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId)
     {
         Patient patient = db.Patienter.FirstOrDefault(x => x.PatientId == patientId);
+
         Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(x => x.LaegemiddelId == laegemiddelId);
+
+
 
         if(patient.vaegt < 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnLet;}
         if(patient.vaegt >= 25) {return patient.vaegt * laegemiddel.enhedPrKgPrDoegnNormal;}
-        //Over vaeget 120
+       //vaegt over 120
         return patient.vaegt * laegemiddel.enhedPrKgPrDoegnTung;
 	}
 }
