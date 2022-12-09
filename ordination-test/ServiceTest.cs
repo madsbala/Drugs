@@ -147,11 +147,12 @@ public class ServiceTest
     }
 
     [TestMethod]
+    //Den skal fejle
     public void GetAnbefaletDosisPerDøgn()
     {
         double patientvægt = service.GetAnbefaletDosisPerDøgn(3, 2);
         //Giver ikke korrekt resultat pga. double 134.10000002
-        Assert.AreEqual(134.1,patientvægt);
+        Assert.AreEqual(134.1,patientvægt,1.0);
         Assert.AreEqual(1.536, patientvægt);
 
 
